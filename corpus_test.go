@@ -3,7 +3,7 @@ package quality
 import "testing"
 
 func TestTsvCorpusLength(t *testing.T) {
-	corpus, err := readTsvCorpus("labels.tsv")
+	corpus, err := ReadTsvCorpus("labels.tsv")
 	if err != nil {
 		t.Fatalf("could not read from tsv repo: %s", err)
 	}
@@ -15,7 +15,7 @@ func TestTsvCorpusLength(t *testing.T) {
 }
 
 func TestTsvRepoLabelGrouping(t *testing.T) {
-	corpus, err := readTsvCorpus("labels.tsv")
+	corpus, err := ReadTsvCorpus("labels.tsv")
 	if err != nil {
 		t.Fatalf("could not read from tsv repo: %s", err)
 	}

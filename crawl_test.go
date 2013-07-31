@@ -6,7 +6,7 @@ func TestCrawl(t *testing.T) {
 	corpus := testCorpus()
 	api := MockAPI{}
 
-	results, err := crawl(api, corpus, 1, 0)
+	results, err := Crawl(api, corpus, 1, 0)
 	if err != nil {
 		t.Fatalf("could not crawl: %v", err)
 	}
@@ -41,7 +41,7 @@ func TestFailedRetriesCrawl(t *testing.T) {
 	corpus := testCorpus()
 	api := FailAPI{}
 
-	results, err := crawl(api, corpus, 1, 1)
+	results, err := Crawl(api, corpus, 1, 1)
 
 	expectedSearches := 0
 	if got := len(results); got != expectedSearches {

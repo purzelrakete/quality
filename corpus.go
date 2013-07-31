@@ -35,8 +35,8 @@ func (corpus Corpus) Relevant(query InformationNeed, doc Doc) (bool, error) {
 	return false, nil
 }
 
-// readTsvCorpus reads the corpus from disk into a Corpus struct
-func readTsvCorpus(filename string) (Corpus, error) {
+// ReadTsvCorpus reads the corpus from disk into a Corpus struct
+func ReadTsvCorpus(filename string) (Corpus, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return Corpus{}, fmt.Errorf("need a valid input file: %v", err)

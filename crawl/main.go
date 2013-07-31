@@ -1,24 +1,13 @@
-package quality
+package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/peterbourgon/g2s"
+	"github.com/purzelrakete/quality"
 	"log"
 )
-
-// InformationNeed is the Information Need the user wishes to satisfy.
-type InformationNeed struct {
-	Kind  string
-	Query string
-}
-
-// Doc is a query result. Kind can be used by a universal search returning
-// multiple types of objects.
-type Doc struct {
-	Kind string
-	ID   int
-}
 
 var (
 	concurrency    = flag.Int("concurrency", 2, "concurrency")
@@ -40,22 +29,31 @@ func main() {
 		log.Fatalf("no transport to statsD endpoint %v: %v", *statsDEndpoint, err)
 	}
 
-	corpus, err := readTsvCorpus(*inputFile)
+	corpus, err := quality.ReadTsvCorpus(*inputFile)
 	if err != nil {
 		log.Fatalf("could not read corpus: %v", err)
 	}
 
-	decoder := func(json []byte) ([]Doc, error) {
-		return []Doc{}, nil
+	type HTTPAPIResponse struct {
+		Docs []quality.Doc `json:"docs"`
 	}
 
-	api := HTTPAPI{
+	decoder := func(jsn []byte) ([]quality.Doc, error) {
+		var response HTTPAPIResponse
+		if err := json.Unmarshal(jsn, &response); err != nil {
+			return []quality.Doc{}, fmt.Errorf("could not converted from json: %s")
+		}
+
+		return response.Docs, nil
+	}
+
+	api := quality.HTTPAPI{
 		Site:    *searchSite,
 		Path:    *searchPath,
 		Decoder: decoder,
 	}
 
-	results, err := crawl(api, corpus, *concurrency, *retries)
+	results, err := quality.Crawl(api, corpus, *concurrency, *retries)
 	if err != nil {
 		log.Fatalf("crawl aborted: %v", err)
 	}
@@ -63,14 +61,14 @@ func main() {
 	fmt.Println()
 	log.Printf("completed crawl with %v queries", len(results))
 
-	es := Evaluators{
-		"mrr":            MRR,
-		"map":            MAP,
-		"precision-at-1": PrecisionAtK(1),
-		"precision-at-2": PrecisionAtK(2),
-		"precision-at-3": PrecisionAtK(3),
-		"precision-at-4": PrecisionAtK(4),
-		"precision-at-5": PrecisionAtK(5),
+	es := quality.Evaluators{
+		"mrr":            quality.MRR,
+		"map":            quality.MAP,
+		"precision-at-1": quality.PrecisionAtK(1),
+		"precision-at-2": quality.PrecisionAtK(2),
+		"precision-at-3": quality.PrecisionAtK(3),
+		"precision-at-4": quality.PrecisionAtK(4),
+		"precision-at-5": quality.PrecisionAtK(5),
 	}
 
 	for name, e := range es {

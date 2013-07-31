@@ -19,7 +19,7 @@ type CrawlMessage struct {
 }
 
 // crawl does a concurrent crawl of the api.
-func crawl(api API, corpus Corpus, concurrency, retries int) (Results, error) {
+func Crawl(api API, corpus Corpus, concurrency, retries int) (Results, error) {
 	results := Results{}
 	ingress := make(chan InformationNeed)
 	egress := make(chan CrawlMessage)

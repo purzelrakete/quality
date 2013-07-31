@@ -1,7 +1,8 @@
 .PHONY: all build test deps install clean
 
 PKGS := \
-github.com/purzelrakete/quality
+github.com/purzelrakete/quality \
+github.com/purzelrakete/quality/crawl
 
 all: deps build test install
 
