@@ -1,5 +1,7 @@
 # Quality
 
+[![Build Status](https://travis-ci.org/purzelrakete/quality.png)](https://travis-ci.org/purzelrakete/quality)
+
 Ranked retrieval quality metrics, using a labelled corpus.
 
 ## Corpus
