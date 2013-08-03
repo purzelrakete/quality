@@ -1,6 +1,7 @@
 # Quality
 
 [![Build Status](https://travis-ci.org/purzelrakete/quality.png)](https://travis-ci.org/purzelrakete/quality)
+[![Coverage Status](https://coveralls.io/repos/purzelrakete/quality/badge.png?branch=master)](https://coveralls.io/r/purzelrakete/quality?branch=master)
 
 Ranked retrieval quality metrics, using a labelled corpus.
 
